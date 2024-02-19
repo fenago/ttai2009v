@@ -52,8 +52,8 @@ with tab1:
                 max_tokens=300,
             )
             try:
-                # Attempt to extract the response text
-                result_text = response['choices'][0]['text']  # Modify this line according to the actual structure
+                # Extract the response text correctly according to the response structure
+                result_text = response['choices'][0]['message']['content']
                 st.write(result_text)
             except KeyError as e:
                 st.error(f"Error extracting response: {e}")
