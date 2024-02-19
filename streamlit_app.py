@@ -77,3 +77,38 @@ with tab1:
                     st.write(response)  # Print the whole response for debugging
         else:
             st.warning("Please provide an image URL or upload an image and ensure the API key is entered.")
+
+# Adding the second tab for DALL-E image generation
+with st.tabs(["Image Analysis", "DALL-E Image Generation"])[1]:
+    st.subheader("Generate Images with DALL-E")
+
+    # DALL-E settings
+    dalle_model = st.selectbox("Select DALL-E Model", ["dall-e-3", "dall-e-2"], index=0)
+    dalle_prompt = st.text_input("Enter Prompt for DALL-E", "a white siamese cat")
+    dalle_size = st.selectbox("Select Image Size", ["1024x1024", "512x512", "256x256"], index=0)
+    dalle_quality = st.selectbox("Select Image Quality", ["standard", "hd"], index=0)
+    dalle_n = st.slider("Number of Images", 1, 4, 1)
+
+    if st.button("Generate Image"):
+        if openai_api_key:
+            # Configure OpenAI client
+            openai.api_key = openai_api_key
+
+            try:
+                # Request to OpenAI DALL-E
+                response = openai.Image.create(
+                    model=dalle_model,
+                    prompt=dalle_prompt,
+                    size=dalle_size,
+                    quality=dalle_quality,
+                    n=dalle_n,
+                )
+
+                # Display generated images
+                for i in range(len(response.data)):
+                    st.image(response.data[i].url, caption=f"Generated Image {i+1}")
+
+            except Exception as e:
+                st.error(f"Error generating images with DALL-E: {e}")
+        else:
+            st.warning("Please enter the OpenAI API key.")
