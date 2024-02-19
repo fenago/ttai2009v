@@ -51,7 +51,12 @@ with tab1:
                 ],
                 max_tokens=300,
             )
-
-            st.write(response.choices[0].text)
+            try:
+                # Attempt to extract the response text
+                result_text = response['choices'][0]['text']  # Modify this line according to the actual structure
+                st.write(result_text)
+            except KeyError as e:
+                st.error(f"Error extracting response: {e}")
+                st.write(response)  # Print the whole response for debugging
         else:
             st.warning("Please upload an image and ensure the API key is entered.")
