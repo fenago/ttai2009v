@@ -26,24 +26,25 @@ model_option = st.sidebar.selectbox("Select Model", ["gpt-4-vision-preview", "gp
 # Tab layout
 tab1, _ = st.tabs(["Image Analysis", "Other Features"])
 
-# ... existing imports and code ...
-
 with tab1:
-    st.subheader("Upload an Image for Analysis")
+    st.subheader("Upload an Image or Provide Image URL for Analysis")
+    image_url = st.text_input("Or enter an Image URL", "")
     uploaded_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
     user_prompt = st.text_area("Enter Prompt", "What's in this image?")
 
     if st.button("Analyze Image"):
-        if uploaded_image and openai_api_key:
-            # Display the uploaded image
-            image_to_display = Image.open(uploaded_image)
-            st.image(image_to_display, caption='Uploaded Image', use_column_width=True)
+        if openai_api_key and (uploaded_image or image_url):
+            if uploaded_image:
+                # Display and process the uploaded image
+                image_to_display = Image.open(uploaded_image)
+                st.image(image_to_display, caption='Uploaded Image', use_column_width=True)
+                image_url = get_image_url(image_to_display)
+            else:
+                # Display the image from the URL
+                st.image(image_url, caption='Image from URL', use_column_width=True)
 
             # Configure OpenAI client
             openai.api_key = openai_api_key
-
-            # Get image URL
-            image_url = get_image_url(image_to_display)
 
             # Request to OpenAI
             response = openai.ChatCompletion.create(
@@ -65,4 +66,4 @@ with tab1:
                 st.error(f"Error extracting response: {e}")
                 st.write(response)  # Print the whole response for debugging
         else:
-            st.warning("Please upload an image and ensure the API key is entered.")
+            st.warning("Please provide an image URL or upload an image and ensure the API key is entered.")
