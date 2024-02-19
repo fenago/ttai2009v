@@ -26,6 +26,8 @@ model_option = st.sidebar.selectbox("Select Model", ["gpt-4-vision-preview", "gp
 # Tab layout
 tab1, _ = st.tabs(["Image Analysis", "Other Features"])
 
+# ... existing imports and code ...
+
 with tab1:
     st.subheader("Upload an Image for Analysis")
     uploaded_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
@@ -33,11 +35,15 @@ with tab1:
 
     if st.button("Analyze Image"):
         if uploaded_image and openai_api_key:
+            # Display the uploaded image
+            image_to_display = Image.open(uploaded_image)
+            st.image(image_to_display, caption='Uploaded Image', use_column_width=True)
+
             # Configure OpenAI client
             openai.api_key = openai_api_key
 
             # Get image URL
-            image_url = get_image_url(Image.open(uploaded_image))
+            image_url = get_image_url(image_to_display)
 
             # Request to OpenAI
             response = openai.ChatCompletion.create(
