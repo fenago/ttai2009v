@@ -58,7 +58,15 @@ with tab1:
 
                 # Request to OpenAI
                 response = openai.ChatCompletion.create(
-                    # ... existing API request code ...
+                    model=model_option,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [{"type": "text", "text": user_prompt},
+                                        {"type": "image_url", "image_url": {"url": image_url}}],
+                        }
+                    ],
+                    max_tokens=300,
                 )
                 try:
                     # Extract the response text correctly according to the response structure
