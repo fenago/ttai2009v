@@ -34,36 +34,38 @@ with tab1:
 
     if st.button("Analyze Image"):
         if openai_api_key and (uploaded_image or image_url):
+            image_to_analyze = None
+
             if uploaded_image:
                 # Display and process the uploaded image
-                image_to_display = Image.open(uploaded_image)
-                st.image(image_to_display, caption='Uploaded Image', use_column_width=True)
-                image_url = get_image_url(image_to_display)
-            else:
-                # Display the image from the URL
-                st.image(image_url, caption='Image from URL', use_column_width=True)
+                image_to_analyze = Image.open(uploaded_image)
+                st.image(image_to_analyze, caption='Uploaded Image', use_column_width=True)
+                image_url = get_image_url(image_to_analyze)
+            elif image_url:
+                try:
+                    # Verify and display the image from the URL
+                    response = requests.get(image_url)
+                    response.raise_for_status()
+                    image_to_analyze = Image.open(BytesIO(response.content))
+                    st.image(image_to_analyze, caption='Image from URL', use_column_width=True)
+                except Exception as e:
+                    st.error(f"Error loading image from URL: {e}")
+                    image_url = None  # Reset image URL if there's an error
 
-            # Configure OpenAI client
-            openai.api_key = openai_api_key
+            if image_url:
+                # Configure OpenAI client
+                openai.api_key = openai_api_key
 
-            # Request to OpenAI
-            response = openai.ChatCompletion.create(
-                model=model_option,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [{"type": "text", "text": user_prompt},
-                                    {"type": "image_url", "image_url": {"url": image_url}}],
-                    }
-                ],
-                max_tokens=300,
-            )
-            try:
-                # Extract the response text correctly according to the response structure
-                result_text = response['choices'][0]['message']['content']
-                st.write(result_text)
-            except KeyError as e:
-                st.error(f"Error extracting response: {e}")
-                st.write(response)  # Print the whole response for debugging
+                # Request to OpenAI
+                response = openai.ChatCompletion.create(
+                    # ... existing API request code ...
+                )
+                try:
+                    # Extract the response text correctly according to the response structure
+                    result_text = response['choices'][0]['message']['content']
+                    st.write(result_text)
+                except KeyError as e:
+                    st.error(f"Error extracting response: {e}")
+                    st.write(response)  # Print the whole response for debugging
         else:
             st.warning("Please provide an image URL or upload an image and ensure the API key is entered.")
