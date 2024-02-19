@@ -24,7 +24,7 @@ openai_api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
 model_option = st.sidebar.selectbox("Select Model", ["gpt-4-vision-preview", "gpt-4-1106-vision-preview"], index=0)
 
 # Tab layout
-tab1, _ = st.tabs(["Image Analysis", "Other Features"])
+tab1, tab2 = st.tabs(["Image Analysis", "DALL-E Image Generation"])
 
 with tab1:
     st.subheader("Upload an Image or Provide Image URL for Analysis")
@@ -79,7 +79,7 @@ with tab1:
             st.warning("Please provide an image URL or upload an image and ensure the API key is entered.")
 
 # Adding the second tab for DALL-E image generation
-with st.tabs(["Image Analysis", "DALL-E Image Generation"])[1]:
+with tab2:
     st.subheader("Generate Images with DALL-E")
 
     # DALL-E settings
