@@ -17,7 +17,7 @@ def get_image_url(image):
 st.title("AI Image Analysis")
 
 # Display the header image
-st.image("https://lwfiles.mycourse.app/65a6a0bb6e5c564383a8b347-public/4ef4ee108068d6f94365c6d2360b3a66.png")
+st.image("https://lwfiles.mycourse.app/65a6a0bb6e5c564383a8b347-public/81791ed30dbcd226feec79d58591be68.png")
 
 # Sidebar for API key and options
 openai_api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
