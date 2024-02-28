@@ -17,7 +17,8 @@ def get_image_url(image):
 st.title("AI Image Analysis")
 
 # Display the header image
-st.image("https://lwfiles.mycourse.app/65a6a0bb6e5c564383a8b347-public/81791ed30dbcd226feec79d58591be68.png")
+# st.image("https://lwfiles.mycourse.app/65a6a0bb6e5c564383a8b347-public/81791ed30dbcd226feec79d58591be68.png")
+st.image("https://reddotmiami.com/wp-content/uploads/bfi_thumb/rdm17-sponsors-feature_miami-dade-college-ni0a0heylglji1208ljp6e0q3d88qq8jbo2h48yk4w.gif")
 
 # Sidebar for API key and options
 openai_api_key = st.sidebar.text_input("Enter OpenAI API Key", type="password")
